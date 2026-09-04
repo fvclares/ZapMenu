@@ -69,15 +69,15 @@ img,video{display:block;max-width:100%}
 .btn-ghost:hover{background:rgba(255,255,255,0.14)}
 .kicker{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold)}
 /* hero scrub */
-.hero{position:relative;height:400vh}
-.hero-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;align-items:center}
+.hero{position:relative;height:auto}
+.hero-sticky{position:relative;height:auto;min-height:92vh;overflow:hidden;display:flex;align-items:center;padding:110px 0 64px}
 .poster{position:absolute;inset:0;background:var(--canvas) center/cover no-repeat}
 .poster::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 120% 90% at 50% 45%, rgba(10,10,18,0) 35%, rgba(10,10,18,.62) 100%)}
 .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s}
 .stage.video-ready .hero-video{opacity:1}
 .scrim{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 120% 90% at 50% 45%,rgba(10,10,18,0) 35%,rgba(10,10,18,.62) 100%)}
-.bands{position:relative;z-index:2;width:100%;height:100%;pointer-events:none}
-.band{position:absolute;inset:0;display:flex;align-items:center;padding:0 6vw;opacity:0;transition:none}
+.bands{position:relative;z-index:2;width:100%;height:auto;pointer-events:none;display:flex;align-items:center}
+.band{position:relative;inset:auto;display:flex;align-items:center;padding:0 6vw;opacity:1;transition:none}
 .band::before{content:"";position:absolute;inset:-4%;pointer-events:none;opacity:calc(.25 + .75*var(--k,1));background:radial-gradient(ellipse 74% 62% at 50% 50%,rgba(5,5,10,.66) 0%,rgba(5,5,10,.44) 46%,rgba(5,5,10,0) 76%)}
 .band-inner{position:relative;max-width:560px}
 .band h2{font-family:"Space Grotesk",sans-serif;font-size:clamp(32px,5vw,58px);line-height:0.95;letter-spacing:-0.04em;margin:0 0 12px;text-shadow:var(--tshadow)}
@@ -203,6 +203,11 @@ section{position:relative;padding:84px 0}
   .bands .band{opacity:1 !important}
   .hero-video{opacity:1}
 }
+/* hero static - video de fundo removido para evitar conflito de scroll */
+.hero-video{display:none !important}
+.hero-hud,.cue{display:none !important}
+.phone-mock{display:none !important}
+.band[data-range="0.16,0.32"],.band[data-range="0.36,0.52"],.band[data-range="0.58,0.82"]{display:none !important}
 /* reduced motion */
 @media (prefers-reduced-motion:reduce){
   .reveal,.stagger > *{opacity:1;transform:none;transition:none}
@@ -232,9 +237,7 @@ footer{padding:32px 0;border-top:1px solid var(--line);color:var(--text-tertiary
 <div class="hero" id="hero">
   <div class="hero-sticky stage" id="stage">
     <div class="poster" id="poster"></div>
-    <video id="heroVideo" class="hero-video" preload="none" muted playsinline aria-hidden="true" tabindex="-1"></video>
     <div class="scrim" aria-hidden="true"></div>
-    <div class="phone-mock" aria-hidden="true"><video src="assets/demo-pedido.mp4" autoplay muted loop playsinline></video></div>
 
     <div class="bands" id="bands">
       <!-- 1 -->
@@ -616,6 +619,12 @@ const hero=document.getElementById('hero');
 const bands=[...document.querySelectorAll('.band')];
 const ring=document.querySelector('.ring');
 const hudText=document.getElementById('hudText');
+// VIDEO DE FUNDO REMOVIDO - modo estatico sem scrub para evitar conflito de scroll
+if(!video){
+  if(posterLayer) posterLayer.style.backgroundImage="url('assets/hero-poster.jpg')";
+  // garante primeira banda visivel
+  bands.forEach(b=>{b.style.opacity=1; b.style.setProperty('--k',1)});
+} else {
 let scrubOn=false, rafId=null, lastTick=0;
 let target=0, shown=0;
 let seekBusy=false, pendingTime=null;
@@ -789,6 +798,9 @@ matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',e=>{
   if(e.matches) pinToFinalStates();
   else applyHeroMode();
 });
+} // fim do else do modo video
+// garante poster estatico mesmo sem video
+if(!video && posterLayer) posterLayer.style.backgroundImage="url('assets/hero-poster.jpg')";
 // reveal observer
 const io=new IntersectionObserver((entries)=>{
   entries.forEach(e=>{
