@@ -208,6 +208,14 @@ section{position:relative;padding:84px 0}
 .hero-hud,.cue{display:none !important}
 .phone-mock{display:none !important}
 .band[data-range="0.16,0.32"],.band[data-range="0.36,0.52"],.band[data-range="0.58,0.82"]{display:none !important}
+/* CTA 7 dias - mobile otimizado */
+#leadForm{width:100%}
+#leadForm .lead-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#leadForm input{width:100%;min-height:48px;font-size:16px}
+@media(max-width:560px){
+  #leadForm .lead-grid{grid-template-columns:1fr}
+  #cta .card{padding:24px 18px !important}
+}
 /* reduced motion */
 @media (prefers-reduced-motion:reduce){
   .reveal,.stagger > *{opacity:1;transform:none;transition:none}
@@ -566,16 +574,15 @@ via wa.me em 1 toque</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;opacity:0.9">garantia</div>
         <h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(24px,4vw,40px);line-height:0.95;letter-spacing:-0.03em;margin:8px 0 10px">Teste 7 dias com seu link real.<br>Se não receber 1 pedido organizado, devolvemos.</h2>
         <p style="opacity:0.9;max-width:56ch;margin:0 auto 18px;line-height:1.6">Seu cardápio vira vendedor 24h. O cliente pede sozinho, você só confirma no WhatsApp.</p>
-        <form id="leadForm" style="max-width:520px;margin:0 auto;display:grid;gap:10px">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-            <input required name="nome" placeholder="Seu nome" style="padding:14px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.25);background:rgba(255,255,255,0.92);color:#111;font-size:14px">
-            <input required name="whats" placeholder="WhatsApp (11) 99999-9999" style="padding:14px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.25);background:rgba(255,255,255,0.92);color:#111;font-size:14px">
+        <form id="leadForm" style="max-width:520px;margin:0 auto;display:grid;gap:10px" novalidate>
+          <div class="lead-grid">
+            <input required name="nome" type="text" autocomplete="name" placeholder="Seu nome" aria-label="Seu nome" style="padding:14px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.25);background:rgba(255,255,255,0.92);color:#111;font-size:16px">
+            <input required name="email" type="email" autocomplete="email" inputmode="email" placeholder="Seu melhor e-mail" aria-label="Seu e-mail" style="padding:14px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.25);background:rgba(255,255,255,0.92);color:#111;font-size:16px">
           </div>
-          <input name="loja" placeholder="Nome da loja (ex: Bella Massa)" style="padding:14px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.25);background:rgba(255,255,255,0.92);color:#111;font-size:14px">
-          <button type="submit" class="btn" style="background:white;color:#ff4722;font-weight:800;width:100%">Quero meu cardápio no ar hoje — R$29/mês</button>
-          <div style="font-size:11px;opacity:0.85">Ao enviar você recebe o link no WhatsApp. Sem spam, sem fidelidade.</div>
+          <button type="submit" class="btn" style="background:white;color:#ff4722;font-weight:800;width:100%;min-height:48px">Começar meus 7 dias grátis →</button>
+          <div style="font-size:11px;opacity:0.85">Acesso imediato • Sem cartão • Sem spam • Cancele quando quiser</div>
         </form>
-        <div id="formOk" style="display:none;margin-top:16px;background:white;color:#111;padding:14px;border-radius:12px;font-weight:700">Recebemos! Vamos te chamar no WhatsApp em minutos para ativar seu link.</div>
+        <div id="formOk" style="display:none;margin-top:16px;background:white;color:#111;padding:14px;border-radius:12px;font-weight:700;text-align:left">✓ Recebemos! Enviamos o acesso de 7 dias para o seu e-mail. Verifique a caixa de entrada (e spam) em instantes.</div>
       </div>
     </div>
   </div>
@@ -869,23 +876,24 @@ function startHold(e){ e.preventDefault(); if(matchMedia('(prefers-reduced-motio
 function endHold(){ holding=false; if(!holdRaf) loopHold(); }
 btn.addEventListener('mousedown',startHold); btn.addEventListener('touchstart',startHold,{passive:false});
 addEventListener('mouseup',endHold); addEventListener('touchend',endHold);
-// form
+// form 7 dias - apenas nome e e-mail (mobile otimizado)
 const form=document.getElementById('leadForm');
 const ok=document.getElementById('formOk');
 form.addEventListener('submit',e=>{
   e.preventDefault();
   const data=new FormData(form);
-  const nome=data.get('nome');
-  const whats=data.get('whats').replace(/\D/g,'');
-  const loja=data.get('loja')||'sua loja';
-  const text=`Olá! Quero meu cardápio no ar. Loja: ${loja} | Nome: ${nome} | Whats: ${whats}`;
-  // mailto fallback + wa.me
-  const wa=`https://wa.me/55${whats}?text=${encodeURIComponent(text)}`;
+  const nome=(data.get('nome')||'').trim();
+  const email=(data.get('email')||'').trim();
+  if(!nome || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    const firstInvalid = !nome ? form.querySelector('[name="nome"]') : form.querySelector('[name="email"]');
+    if(firstInvalid){ firstInvalid.focus(); firstInvalid.style.borderColor='#ff4722'; setTimeout(()=>firstInvalid.style.borderColor='rgba(255,255,255,0.25)',2000); }
+    return;
+  }
+  // salva lead local para posterior integracao (ex: Supabase, Sheet, Email)
+  try{ localStorage.setItem('zapmenu_lead', JSON.stringify({nome,email,ts:Date.now()})); }catch{}
   form.style.display='none';
   ok.style.display='block';
-  ok.innerHTML=`Recebemos, ${nome}! Abrindo WhatsApp para confirmar. <br><a href="${wa}" target="_blank" style="color:#ff4722">Abrir WhatsApp agora</a> — ou aguarde nosso contato.`;
-  // opcional: mailto
-  // window.open(wa,'_blank');
+  ok.innerHTML=`✓ Perfeito, ${nome}! Enviamos seu acesso de <strong>7 dias grátis</strong> para <strong>${email}</strong>.<br><span style="font-weight:400;opacity:0.8">Verifique sua caixa de entrada (e spam). Em breve você também recebe o link direto no e-mail.</span><br><a href="https://fvclares.github.io/cardapioonline/index.html?store=napolle" target="_blank" style="color:#ff4722;text-decoration:underline">→ Enquanto isso, testar cardápio Napollê ao vivo</a>`;
 });
 // focus visible
 document.addEventListener('keydown',e=>{ if(e.key==='Tab') document.body.classList.add('kb'); });
