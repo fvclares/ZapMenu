@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cardápio no WhatsApp — Seu link vira vendedor 24h. Sem comissão.</title>
+<meta name="description" content="Cardápio digital linkável que transforma toque em pedido no WhatsApp. Pizza meio a meio, borda, taxa por bairro, sem app, sem cadastro e sem comissão. R$29 por mês.">
+<meta name="theme-color" content="#0A0E14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ff4722'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-family='monospace' font-size='16' fill='white'%3E%3C/text%3E%3C/svg%3E">
+<meta property="og:title" content="Cardápio no WhatsApp — Sem comissão, sem bagunça">
+<meta property="og:description" content="Seu cardápio vira vendedor 24h. Cliente pede sozinho, você só confirma no WhatsApp.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://fvclares.github.io/cardapio-venda/assets/hero-poster.jpg">
+<meta property="og:url" content="https://fvclares.github.io/cardapio-venda/">
+<style>
+:root{
+  --canvas:#0A0E14;
+  --panel:#141821;
+  --panel-2:#1C212E;
+  --line:rgba(255,255,255,0.08);
+  --line-2:rgba(255,255,255,0.14);
+  --accent:#ff4722;
+  --accent-hover:#e63e1d;
+  --accent-muted:rgba(255,71,34,0.13);
+  --gold:#f5b63b;
+  --text-primary:#f8f7f5;
+  --text-secondary:#a1a8b8;
+  --text-tertiary:#6b7289;
+  --radius:20px;
+  --radius-sm:12px;
+  --tshadow:0 1px 2px rgba(5,5,10,.95),0 3px 12px rgba(5,5,10,.78),0 10px 44px rgba(5,5,10,.8);
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:clip}
+html,body{overflow-x:clip}
+body{margin:0;background:var(--canvas);color:var(--text-primary);font-family:"Plus Jakarta Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img,video{display:block;max-width:100%}
+::selection{background:var(--accent);color:white}
+/* ambient */
+.bg-ambient{position:fixed;inset:0;pointer-events:none;z-index:-1;background:
+  radial-gradient(ellipse 900px 700px at 70% 10%, rgba(255,71,34,0.10), transparent 60%),
+  radial-gradient(ellipse 800px 600px at 10% 80%, rgba(245,182,59,0.07), transparent 60%),
+  radial-gradient(ellipse 1200px 900px at 50% 50%, rgba(20,24,33,0.9), transparent 70%)}
+.bg-grain{position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:0.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E")}
+.particles{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+.particles span{position:absolute;width:2px;height:2px;background:var(--accent);border-radius:50%;opacity:0.5;animation:drift linear infinite}
+.particles span:nth-child(1){left:12%;top:20%;animation-duration:42s}
+.particles span:nth-child(2){left:78%;top:35%;animation-duration:58s;animation-delay:-12s}
+.particles span:nth-child(3){left:45%;top:70%;animation-duration:50s;animation-delay:-20s}
+.particles span:nth-child(4){left:88%;top:78%;animation-duration:66s}
+.particles span:nth-child(5){left:22%;top:85%;animation-duration:38s;animation-delay:-8s}
+@keyframes drift{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(20px,-120px,0)}}
+/* nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:rgba(10,14,20,0.72);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav-brand{display:flex;align-items:center;gap:10px;font-family:"Space Grotesk",sans-serif;font-weight:700;letter-spacing:-0.02em}
+.nav-brand i{width:36px;height:36px;border-radius:10px;background:var(--accent);display:grid;place-items:center;font-style:normal;color:white;font-size:18px}
+.nav-links{display:flex;gap:22px;font-size:13px;color:var(--text-secondary);align-items:center}
+.nav-links a{text-decoration:none}
+.nav-links a:hover{color:white}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;border-radius:999px;font-weight:700;font-size:14px;text-decoration:none;border:1px solid transparent;cursor:pointer;transition:all .2s var(--ease)}
+.btn-accent{background:var(--accent);color:white}
+.btn-accent:hover{background:var(--accent-hover);transform:translateY(-1px)}
+.btn-ghost{background:rgba(255,255,255,0.08);color:white;border-color:rgba(255,255,255,0.08);backdrop-filter:blur(8px)}
+.btn-ghost:hover{background:rgba(255,255,255,0.14)}
+.kicker{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold)}
+/* hero scrub */
+.hero{position:relative;height:400vh}
+.hero-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;align-items:center}
+.poster{position:absolute;inset:0;background:var(--canvas) center/cover no-repeat}
+.poster::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 120% 90% at 50% 45%, rgba(10,10,18,0) 35%, rgba(10,10,18,.62) 100%)}
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s}
+.stage.video-ready .hero-video{opacity:1}
+.scrim{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 120% 90% at 50% 45%,rgba(10,10,18,0) 35%,rgba(10,10,18,.62) 100%)}
+.bands{position:relative;z-index:2;width:100%;height:100%;pointer-events:none}
+.band{position:absolute;inset:0;display:flex;align-items:center;padding:0 6vw;opacity:0;transition:none}
+.band::before{content:"";position:absolute;inset:-4%;pointer-events:none;opacity:calc(.25 + .75*var(--k,1));background:radial-gradient(ellipse 74% 62% at 50% 50%,rgba(5,5,10,.66) 0%,rgba(5,5,10,.44) 46%,rgba(5,5,10,0) 76%)}
+.band-inner{position:relative;max-width:560px}
+.band h2{font-family:"Space Grotesk",sans-serif;font-size:clamp(32px,5vw,58px);line-height:0.95;letter-spacing:-0.04em;margin:0 0 12px;text-shadow:var(--tshadow)}
+.band h2 em{font-style:normal;color:var(--accent)}
+.band p{color:rgba(248,247,245,0.82);font-size:clamp(14px,1.6vw,18px);line-height:1.5;margin:0 0 18px;text-shadow:var(--tshadow)}
+.band .btn{pointer-events:auto}
+.band .chip{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.08em;background:rgba(8,8,15,.55);border:1px solid rgba(255,255,255,0.18);border-radius:999px;padding:6px 10px;backdrop-filter:blur(10px);display:inline-flex;gap:8px;align-items:center;margin-bottom:14px}
+.band-right{justify-content:flex-end;text-align:right}
+.band-right .band-inner{margin-left:auto}
+.band-center{justify-content:center;text-align:center}
+.band-center .band-inner{max-width:720px;margin:0 auto}
+/* choreography */
+.band .w{display:inline-block;will-change:transform,opacity}
+.band .c{display:inline-block;will-change:transform,opacity}
+/* hero ui */
+.hero-hud{position:absolute;left:28px;bottom:24px;z-index:3;display:flex;gap:12px;align-items:center;color:var(--text-secondary);font-family:"JetBrains Mono",monospace;font-size:11px}
+.ring{width:48px;height:48px;color:var(--accent)}
+.ring circle{transition:stroke-dashoffset .1s}
+.cue{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,0.7);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;font-family:"JetBrains Mono",monospace}
+.cue i{width:28px;height:42px;border:1px solid rgba(255,255,255,0.25);border-radius:999px;display:grid;place-items:center}
+.cue i::after{content:"";width:4px;height:8px;background:white;border-radius:999px;animation:cue 1.6s infinite}
+@keyframes cue{0%{transform:translateY(-6px);opacity:0}50%{opacity:1}100%{transform:translateY(6px);opacity:0}}
+/* phone mock in hero */
+.phone-mock{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(340px, 42vw);aspect-ratio:9/19.5;background:#0f1117;border-radius:36px;border:6px solid #1e232e;box-shadow:0 24px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06);overflow:hidden;z-index:1;opacity:0.95}
+.phone-mock video{width:100%;height:100%;object-fit:cover}
+/* sections */
+section{position:relative;padding:84px 0}
+.container{width:min(1160px,92vw);margin:0 auto}
+.eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.h2{font-family:"Space Grotesk",sans-serif;font-size:clamp(28px,4vw,44px);line-height:0.96;letter-spacing:-0.03em;margin:0}
+.h2 em{color:var(--accent);font-style:normal}
+.lede{color:var(--text-secondary);font-size:17px;line-height:1.6;max-width:62ch}
+.grid{display:grid;gap:18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(135deg, rgba(255,71,34,0.22), transparent 40%);-webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .3s}
+.card:hover::before{opacity:1}
+.tag{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.08em;color:var(--text-tertiary);text-transform:uppercase}
+/* before after */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch}
+.before,.after{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:var(--panel)}
+.before{position:relative}
+.before img{width:100%;height:100%;object-fit:cover}
+.badge{position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.12);color:white;font-family:"JetBrains Mono",monospace;font-size:11px;padding:6px 10px;border-radius:999px}
+.after{padding:18px}
+.after video{width:100%;border-radius:14px;border:1px solid var(--line)}
+/* pain cards */
+.pain-grid{grid-template-columns:repeat(3,1fr)}
+.pain-card{padding:26px}
+.pain-card h3{font-family:"Space Grotesk",sans-serif;margin:10px 0 8px;font-size:20px}
+.pain-card p{color:var(--text-secondary);line-height:1.6;font-size:14px;margin:0}
+.pain-card .arrow{margin-top:14px;color:var(--accent);font-weight:700;font-size:13px}
+/* steps */
+.steps{grid-template-columns:repeat(3,1fr)}
+.step{padding:28px}
+.step-num{width:36px;height:36px;border-radius:999px;background:var(--accent);color:white;display:grid;place-items:center;font-weight:800;font-size:14px}
+.step h3{margin:14px 0 8px;font-family:"Space Grotesk",sans-serif}
+/* interactive */
+.pizza-lab{background:var(--panel);border:1px solid var(--line);border-radius:24px;overflow:hidden;display:grid;grid-template-columns:1.1fr 0.9fr}
+.lab-visual{padding:28px;background:radial-gradient(ellipse 600px 400px at 30% 20%, rgba(255,71,34,0.12), transparent 60%), var(--panel-2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.pizza{width:260px;height:260px;border-radius:50%;background:#f0d9a8;border:6px solid #d8a86a;position:relative;overflow:hidden;box-shadow:inset 0 0 0 8px #e9b77a, 0 12px 30px rgba(0,0,0,0.35)}
+.slice{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;color:#5a2a12;font-family:"Space Grotesk",sans-serif}
+.hold-btn{width:100%;padding:16px;border-radius:14px;border:1px solid var(--line);background:var(--canvas);color:white;font-weight:700;cursor:pointer;transition:all .2s}
+.hold-btn:active{transform:scale(0.98)}
+.progress{height:6px;background:rgba(255,255,255,0.08);border-radius:999px;overflow:hidden;width:100%}
+.progress i{display:block;height:100%;width:0;background:var(--accent);transition:width .1s linear}
+/* features */
+.features{grid-template-columns:repeat(4,1fr)}
+.feature{padding:20px}
+.feature h4{margin:10px 0 6px;font-size:15px}
+.feature p{color:var(--text-secondary);font-size:13px;line-height:1.6;margin:0}
+/* compare table */
+.table{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.table th,.table td{padding:14px 16px;text-align:left;font-size:14px;border-bottom:1px solid var(--line)}
+.table th{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-tertiary)}
+.table tr:last-child td{border-bottom:none}
+.col-hi{background:rgba(255,71,34,0.08)}
+.check{color:#22c55e;font-weight:800}
+.cross{color:#6b7289}
+/* pricing */
+.pricing{grid-template-columns:1.1fr 0.9fr;align-items:start}
+.price-card{background:linear-gradient(180deg, #1C212E, #141821);border:1px solid rgba(255,71,34,0.25);border-radius:24px;padding:28px;position:relative;overflow:hidden}
+.price-card::after{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:linear-gradient(135deg, var(--accent), transparent 50%, rgba(245,182,59,0.4));-webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.price{font-family:"Space Grotesk",sans-serif;font-size:52px;letter-spacing:-0.04em;line-height:1}
+.price small{font-size:16px;color:var(--text-secondary);font-family:"Plus Jakarta Sans",sans-serif;letter-spacing:0}
+.economy{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
+/* whatsapp demo */
+.wa{font-family:"JetBrains Mono",monospace;font-size:12px;line-height:1.6;background:#0b1410;border:1px solid rgba(34,197,94,0.2);border-radius:16px;padding:18px;white-space:pre-wrap;color:#d1fae5}
+/* faq */
+.faq{max-width:760px}
+.faq details{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.faq summary{cursor:pointer;font-weight:700;list-style:none}
+.faq summary::-webkit-details-marker{display:none}
+.faq p{color:var(--text-secondary);line-height:1.6;margin:10px 0 0}
+/* reveal */
+.reveal{opacity:0;transform:translateY(14px);transition:all .6s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal.in > *{transition-delay:0s}
+.stagger > *{opacity:0;transform:translateY(10px);transition:all .5s var(--ease)}
+.stagger.in > *:nth-child(1){transition-delay:.05s;opacity:1;transform:none}
+.stagger.in > *:nth-child(2){transition-delay:.12s;opacity:1;transform:none}
+.stagger.in > *:nth-child(3){transition-delay:.19s;opacity:1;transform:none}
+.stagger.in > *:nth-child(4){transition-delay:.26s;opacity:1;transform:none}
+.stagger.in > *:nth-child(5){transition-delay:.33s;opacity:1;transform:none}
+.stagger.in > *:nth-child(6){transition-delay:.40s;opacity:1;transform:none}
+.stagger.in > *:nth-child(7){transition-delay:.47s;opacity:1;transform:none}
+.stagger.in > *:nth-child(8){transition-delay:.54s;opacity:1;transform:none}
+/* live pulse */
+.live{width:8px;height:8px;background:#22c55e;border-radius:50%;box-shadow:0 0 0 0 rgba(34,197,94,0.6);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,0.6)}70%{box-shadow:0 0 0 8px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+/* responsive */
+@media(max-width:900px){
+  .pain-grid,.steps,.features,.pricing,.split{grid-template-columns:1fr}
+  .pizza-lab{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .hero{height:360vh}
+  .phone-mock{width:62vw}
+}
+@media(max-height:560px){.cue,.hero-hud{display:none}}
+/* static hero gates */
+@media (max-width:720px),(orientation:portrait) and (max-width:1024px),(orientation:portrait) and (pointer:coarse),(orientation:landscape) and (pointer:coarse) and (max-height:560px),(prefers-reduced-motion:reduce){
+  .hero{height:auto}
+  .hero-sticky{position:relative;height:92vh}
+  .bands .band{opacity:1 !important}
+  .hero-video{opacity:1}
+}
+/* reduced motion */
+@media (prefers-reduced-motion:reduce){
+  .reveal,.stagger > *{opacity:1;transform:none;transition:none}
+  .particles{display:none}
+}
+footer{padding:32px 0;border-top:1px solid var(--line);color:var(--text-tertiary);font-size:13px}
+</style>
+</head>
+<body>
+<div class="bg-ambient" aria-hidden="true"></div>
+<div class="bg-grain" aria-hidden="true"></div>
+<div class="particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+
+<nav class="nav">
+  <div class="nav-brand"><i>◉</i> Cardápio WhatsApp</div>
+  <div class="nav-links">
+    <a href="#passado">Antes e depois</a>
+    <a href="#funciona">Como funciona</a>
+    <a href="#painel">Painel</a>
+    <a href="#preco">Preço</a>
+    <a href="#faq">FAQ</a>
+    <a class="btn btn-accent" href="#cta" style="padding:10px 16px">Quero meu link</a>
+  </div>
+</nav>
+
+<!-- HERO SCRUB -->
+<div class="hero" id="hero">
+  <div class="hero-sticky stage" id="stage">
+    <div class="poster" id="poster"></div>
+    <video id="heroVideo" class="hero-video" preload="none" muted playsinline aria-hidden="true" tabindex="-1"></video>
+    <div class="scrim" aria-hidden="true"></div>
+    <div class="phone-mock" aria-hidden="true"><video src="assets/demo-pedido.mp4" autoplay muted loop playsinline></video></div>
+
+    <div class="bands" id="bands">
+      <!-- 1 -->
+      <div class="band" data-range="0.00,0.14" data-ramp="0.03">
+        <div class="band-inner">
+          <div class="chip"><span class="live"></span> sem comissão • sem app • sem cadastro</div>
+          <h2 data-split>Seu cardápio<br><em>vira vendedor</em> 24h no WhatsApp</h2>
+          <p data-split>Link exclusivo. Cliente monta pizza meio a meio, escolhe bairro e paga. Você recebe pronto para confirmar em 1 toque.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn btn-accent" href="#cta">Quero meu link por R$29/mês</a>
+            <a class="btn btn-ghost" href="#demo">Ver demonstração</a>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,0.7)">
+            <span>✓ 40 produtos demo</span><span>•</span><span>✓ 8 categorias</span><span>•</span><span>✓ funciona sem internet</span>
+          </div>
+        </div>
+      </div>
+      <!-- 2 -->
+      <div class="band band-right" data-range="0.16,0.32">
+        <div class="band-inner">
+          <div class="kicker">o passado</div>
+          <h2 data-split>Chega de<br><em>pedido bagunçado</em> no WhatsApp</h2>
+          <p data-split>Cliente digita solto, você pergunta 5 coisas, erra conta da meia pizza e perde tempo. É o retrato do atendimento manual que todo lojista quer deixar para trás.</p>
+        </div>
+      </div>
+      <!-- 3 -->
+      <div class="band" data-range="0.36,0.52">
+        <div class="band-inner">
+          <div class="kicker">a virada</div>
+          <h2 data-split>Cliente monta<br><em>sozinho em 3 toques</em></h2>
+          <p data-split>Tamanho, até 4 sabores, borda, extras e observação. Preço mostra na hora, valida fração e taxa por bairro automática.</p>
+        </div>
+      </div>
+      <!-- 4 assentamento -->
+      <div class="band band-center" data-range="0.58,0.82">
+        <div class="band-inner">
+          <div class="kicker" style="color:var(--gold)">você só confirma</div>
+          <h2 data-split>Link no Instagram.<br><em>Pedido pronto</em> no seu WhatsApp.</h2>
+          <p data-split style="margin:0 auto 18px;max-width:52ch">Mensagem padrão com código #042, tamanho, extras, endereço e pagamento. É copiar, confirmar e entregar.</p>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+            <a class="btn btn-accent" href="#cta">Ativar meu cardápio hoje</a>
+            <a class="btn btn-ghost" href="#preco">Ver quanto economizo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-hud" id="hud">
+      <svg class="ring" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="126" style="stroke-dashoffset:var(--ld,126)"/></svg>
+      <span id="hudText">carregando jornada</span>
+    </div>
+    <div class="cue" aria-hidden="true"><i></i> role para explorar</div>
+  </div>
+</div>
+
+<main id="main" tabindex="-1">
+<!-- ANTES E DEPOIS -->
+<section id="passado">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">antes e depois real</div>
+      <h2 class="h2">Do caos no WhatsApp <em>ao pedido organizado</em> com link</h2>
+      <p class="lede">Mídia 1 é o passado que todo lojista reconhece: pedido sem padrão. Mídia 2 é a nova ferramenta rodando. Mídia 3 é a prova de leitura.</p>
+    </div>
+
+    <div class="split" style="margin-top:22px">
+      <div class="before reveal">
+        <span class="badge">mídia 1 • antes</span>
+        <img src="assets/caos-01.jpg" alt="Conversa bagunçada no WhatsApp antes da ferramenta" loading="lazy">
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:14px;background:linear-gradient(transparent, rgba(0,0,0,0.7));color:white;font-size:13px;line-height:1.4">
+          <strong>Antes:</strong> cliente digita solto, pergunta taxa, erra sabor, você anota no papel.
+        </div>
+      </div>
+      <div class="after reveal" style="display:flex;flex-direction:column;gap:12px">
+        <span class="tag">exemplo real • prova do caos</span>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <img src="assets/donalia-01.jpg" alt="Exemplo de conversa desorganizada 1" style="border-radius:12px;border:1px solid var(--line)" loading="lazy">
+          <img src="assets/donalia-02.jpg" alt="Exemplo de conversa desorganizada 2" style="border-radius:12px;border:1px solid var(--line)" loading="lazy">
+        </div>
+        <p style="color:var(--text-secondary);font-size:13px;line-height:1.6;margin:0">Exemplo ilustrativo com base em conversas reais. Pedido sem padrão, sem código, sem endereço completo. É aqui que o tempo some e o erro entra.</p>
+      </div>
+    </div>
+
+    <div class="split" style="margin-top:18px">
+      <div class="card reveal" id="demo">
+        <div class="tag">mídia 2 • a nova ferramenta</div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;margin:8px 0 6px">O cardápio que vende sozinho</h3>
+        <p style="color:var(--text-secondary);font-size:14px;line-height:1.6;margin:0 0 12px">Link exclusivo <code style="background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:6px">?store=sua-loja</code> com carrossel, categorias deslizantes, busca e vitrine. O vídeo mostra a navegação real.</p>
+        <video src="assets/hero-scrub.mp4" autoplay muted loop playsinline controls style="width:100%;border-radius:14px;border:1px solid var(--line)"></video>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+          <span class="chip">8 seções</span><span class="chip">~40 produtos demo</span><span class="chip">personalização pizza 1 a 4 sabores</span>
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="tag">mídia 3 • leitura fácil do pedido</div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;margin:8px 0 6px">Pedido que já chega pronto para confirmar</h3>
+        <p style="color:var(--text-secondary);font-size:14px;line-height:1.6;margin:0 0 12px">Mídia 3 mostra a mensagem formatada caindo no WhatsApp. Sem pergunta extra. Sem conta na cabeça.</p>
+        <video src="assets/demo-pedido.mp4" autoplay muted loop playsinline controls style="width:100%;border-radius:14px;border:1px solid var(--line);max-height:520px;object-fit:cover"></video>
+        <div class="wa" style="margin-top:12px">*NOVO PEDIDO #1042* — Bella Massa
+────────────────────────
+🍕 1x Grande ½ Calabresa + ½ Frango c/ Catupiry — R$ 58,90
+   Borda: Catupiry + R$ 6,00
+   Obs: sem cebola
+────────────────────────
+📍 Rua das Flores, 42 — Centro
+💳 PIX na entrega
+🛵 Taxa: R$ 5,00 — Total: R$ 69,90
+👤 João (11) 99999-9999
+via wa.me em 1 toque</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DORES -->
+<section style="padding-top:24px">
+  <div class="container">
+    <div class="grid pain-grid stagger">
+      <div class="card pain-card">
+        <div class="tag">dor 1 → solução</div>
+        <h3>Pedido bagunçado no WhatsApp</h3>
+        <p>Cliente escreve qualquer coisa. Você pergunta bairro, pagamento, troco.</p>
+        <div class="arrow">→ Mensagem padrão com código #042, separador e emojis</div>
+      </div>
+      <div class="card pain-card">
+        <div class="tag">dor 2 → solução</div>
+        <h3>Taxa de iFood comendo a margem</h3>
+        <p>25% em 100 pedidos de R$60 = R$1.500 só de taxa.</p>
+        <div class="arrow">→ R$29 fixo. Economia de R$1.471 por mês</div>
+      </div>
+      <div class="card pain-card">
+        <div class="tag">dor 3 → solução</div>
+        <h3>Dependo de alguém para mudar preço</h3>
+        <p>Agência demora, foto pesa, site fica fora do ar.</p>
+        <div class="arrow">→ Painel edita em 30s com compressão automática</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section id="funciona">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">como funciona</div>
+      <h2 class="h2">Três toques. <em>Pedido no seu WhatsApp.</em></h2>
+    </div>
+    <div class="grid steps stagger" style="margin-top:22px">
+      <div class="card step">
+        <div class="step-num">1</div>
+        <h3>Cliente abre seu link</h3>
+        <p style="color:var(--text-secondary);font-size:14px;line-height:1.6">Instagram, Google, figurinha do WhatsApp ou QR no panfleto. Sem app, sem cadastro. <code>?store=sua-loja</code></p>
+      </div>
+      <div class="card step">
+        <div class="step-num">2</div>
+        <h3>Monta sozinho</h3>
+        <p style="color:var(--text-secondary);font-size:14px;line-height:1.6">Escolhe tamanho, divide até 4 sabores, borda, extras, bairro com taxa e pagamento. Valida fração incompleta.</p>
+      </div>
+      <div class="card step">
+        <div class="step-num">3</div>
+        <h3>Você só confirma</h3>
+        <p style="color:var(--text-secondary);font-size:14px;line-height:1.6">Link <code>wa.me/55...</code> abre seu WhatsApp com a mensagem pronta. Copiar, confirmar e despachar.</p>
+      </div>
+    </div>
+
+    <!-- pizza lab interativo -->
+    <div class="pizza-lab reveal" style="margin-top:22px">
+      <div class="lab-visual">
+        <div class="tag">momento interativo</div>
+        <div class="pizza" id="pizza"><div class="slice" id="sliceText">Segure para montar</div></div>
+        <button class="hold-btn" id="holdBtn">Segurar para montar ½ Calabresa + ½ Frango com borda Catupiry</button>
+        <div class="progress"><i id="progress"></i></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-secondary)" id="labStatus">segure e veja a pizza ganhar dois sabores e preço certo</div>
+      </div>
+      <div style="padding:28px">
+        <div class="eyebrow">personalização que resolve pizza de verdade</div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;margin:6px 0 10px;font-size:22px">Meia, terço e quarto com validação</h3>
+        <ul style="color:var(--text-secondary);font-size:14px;line-height:1.7;margin:0;padding-left:18px">
+          <li>Tamanhos P/M/G/Família com fatias e <code>max_flavors</code> 1 a 4</li>
+          <li>Preço por tamanho diferente por pizza via <code>product_size_prices</code></li>
+          <li>Dois modelos: maior sabor ou proporcional, você escolhe</li>
+          <li>Validação impede pizza incompleta no carrinho</li>
+          <li>Bordas e extras com adicional</li>
+        </ul>
+        <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+          <span class="chip">código 001 a 999</span><span class="chip">obs livre sem cebola</span><span class="chip">borda + extras</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAINEL -->
+<section id="painel">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">o que você controla</div>
+      <h2 class="h2">Painel do lojista. <em>Sem programador.</em></h2>
+      <p class="lede">Dez abas que resolvem o dia a dia. Fotos com compressão 800 / 1200px JPEG 0.7, horário por dia com fechamento para almoço, e tudo em 30 segundos.</p>
+    </div>
+    <div class="grid features stagger" style="margin-top:22px">
+      <div class="card feature"><div class="tag">01</div><h4>Categorias</h4><p>CRUD com ordem de exibição.</p></div>
+      <div class="card feature"><div class="tag">02</div><h4>Produtos e preços</h4><p>Código 1 a 999, base_price, foto, disponível e destaque carrossel 1 a 5.</p></div>
+      <div class="card feature"><div class="tag">03</div><h4>Tamanhos pizza</h4><p>Nome, fatias, max_flavors 1 a 4, ordem e ativo.</p></div>
+      <div class="card feature"><div class="tag">04</div><h4>Bordas e extras</h4><p>Grupos single ou multiple, obrigatório e preço extra.</p></div>
+      <div class="card feature"><div class="tag">05</div><h4>Bairros e taxas</h4><p>Se 1 bairro cobra padrão, se mais mostra seletor.</p></div>
+      <div class="card feature"><div class="tag">06</div><h4>Promoções e combos</h4><p>Preço fechado, grupos com quantidade e janela por dia e horário.</p></div>
+      <div class="card feature"><div class="tag">07</div><h4>Campanhas</h4><p>Agrupa ofertas por período sem duplicar.</p></div>
+      <div class="card feature"><div class="tag">08</div><h4>Pedidos em tempo real</h4><p>Lista 50 últimos, status e Realtime <code>orders-{storeId}</code>.</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:18px;display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+      <span class="tag">também</span>
+      <span style="font-size:14px">Configurações, link da loja com copiar e exportar JSON, assinatura PIX e convites superadmin</span>
+      <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-tertiary)">schedule jsonb • RLS em 8 tabelas • Storage product-images 5MB</span>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARATIVO -->
+<section id="compare">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">comparativo honesto</div>
+      <h2 class="h2">Por que lojista <em>troca o iFood</em> por link próprio</h2>
+    </div>
+    <div class="reveal" style="margin-top:18px;overflow:auto">
+      <table class="table">
+        <thead><tr><th></th><th class="col-hi">Seu cardápio WhatsApp</th><th>iFood / Rappi</th><th>WhatsApp na mão</th><th>Site genérico</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Taxa por pedido</strong></td><td class="col-hi"><strong>R$0 — fixo R$29</strong></td><td>12 a 30% + mensalidade</td><td>R$0 mas sem organização</td><td>R$0 mas sem pedido</td></tr>
+          <tr><td>Pedido organizado</td><td class="col-hi"><span class="check">✓</span> wa.me com código e endereço</td><td><span class="check">✓</span> painel deles</td><td><span class="cross">✕</span> cliente digita solto</td><td><span class="cross">✕</span> só link</td></tr>
+          <tr><td>Pizza meio a meio com validação</td><td class="col-hi"><span class="check">✓</span> 2 modelos + validação</td><td>limitado</td><td><span class="cross">✕</span> na sorte</td><td><span class="cross">✕</span></td></tr>
+          <tr><td>Taxa por bairro</td><td class="col-hi"><span class="check">✓</span> tabela + seletor</td><td><span class="check">✓</span></td><td><span class="cross">✕</span> conta na cabeça</td><td><span class="cross">✕</span></td></tr>
+          <tr><td>Dono do cliente</td><td class="col-hi"><span class="check">✓</span> seu WhatsApp, seu dado</td><td><span class="cross">✕</span> deles</td><td><span class="check">✓</span> mas sem histórico</td><td>sem dado</td></tr>
+          <tr><td>Tempo para subir</td><td class="col-hi"><strong>1h</strong></td><td>dias + aprovação</td><td>minutos mas bagunçado</td><td>minutos</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- PRECO -->
+<section id="preco">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">quanto custa</div>
+      <h2 class="h2">R$29 fixo. <em>Zero comissão.</em></h2>
+    </div>
+    <div class="grid pricing" style="margin-top:22px">
+      <div class="price-card reveal">
+        <div class="tag" style="color:var(--gold)">plano único</div>
+        <div class="price">R$29 <small>/ mês no PIX</small></div>
+        <p style="color:var(--text-secondary);font-size:14px;line-height:1.6;margin:8px 0 16px">Vence dia 01, carência até dia 06, trial até o próximo dia 01. Inclui hospedagem Supabase, painel, link e suporte WhatsApp. Antecipe 6 meses por R$174.</p>
+        <ul style="list-style:none;padding:0;margin:0 0 18px;display:grid;gap:8px;font-size:14px">
+          <li>✓ Link exclusivo <code>?store=sua-loja</code></li>
+          <li>✓ Painel completo sem programador</li>
+          <li>✓ Pedido no WhatsApp em 1 toque</li>
+          <li>✓ Dados isolados por loja com RLS</li>
+          <li>✓ Realtime de pedidos</li>
+        </ul>
+        <a class="btn btn-accent" href="#cta" style="width:100%">Quero meu link por R$29</a>
+        <div style="margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-tertiary);text-align:center">Setup opcional: cadastro de 40 produtos + fotos + treinamento 30 min</div>
+      </div>
+      <div class="reveal" style="display:grid;gap:14px">
+        <div class="economy">
+          <div style="font-weight:800">A conta que fecha o mês</div>
+          <p style="color:var(--text-secondary);font-size:14px;line-height:1.6;margin:6px 0 0">100 pedidos de R$60 = R$6.000 vendidos.<br>No iFood a 25% = R$1.500 de taxa.<br><strong style="color:var(--text-primary)">Aqui = R$29. Economia de R$1.471 no mês.</strong></p>
+        </div>
+        <div class="card">
+          <div class="tag">para quem é</div>
+          <ul style="margin:8px 0 0;padding-left:18px;color:var(--text-secondary);font-size:14px;line-height:1.7">
+            <li><strong style="color:white">Ideal hoje:</strong> pizzarias e esfirrarias, restaurantes com pizza, lanchonetes e docerias</li>
+            <li><strong style="color:white">Roadmap pago:</strong> pagamento online, KDS, NF, estoque, frete por CEP, variação cor e tamanho</li>
+          </ul>
+        </div>
+        <div class="card" style="display:flex;gap:12px;align-items:center">
+          <img src="assets/hero-ending.jpg" alt="" style="width:64px;height:64px;border-radius:10px;object-fit:cover;border:1px solid var(--line)">
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.5"><strong style="color:white">Demonstração offline</strong><br>Funciona via file:// com dados da Bella Massa. Sem internet para vender.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">faq</div>
+      <h2 class="h2">Dúvidas que <em>travam o lojista</em></h2>
+    </div>
+    <div class="faq grid" style="margin-top:18px;gap:12px">
+      <details open><summary>Preciso de programador?</summary><p>Não. Painel sem código. Você edita foto, preço, categoria e horário em 30 segundos.</p></details>
+      <details><summary>Precisa de app?</summary><p>Não. Só link. Cliente abre no celular, sem baixar nada, sem senha. Nome e WhatsApp uma vez, depois só clicar no endereço salvo.</p></details>
+      <details><summary>E se eu mudar preço?</summary><p>Snapshot imutável congela nome, tamanho, sabores, borda, extras e preço no instante do pedido. Novo preço só vale para pedidos novos.</p></details>
+      <details><summary>Minha pizzaria fecha no almoço. E aí?</summary><p>Horário por dia com 4 faixas calcula Aberto e Fechado automático via <code>schedule jsonb</code>. Sem esquecer de fechar loja.</p></details>
+      <details><summary>Posso vender hambúrguer ou pão por quilo?</summary><p>Hoje é otimizado para pizza. Hamburgueria, padaria e loja geral entram como expansão paga conforme <code>plano-expansao-multi-vertical.md</code>.</p></details>
+      <details><summary>Meus dados ficam onde?</summary><p>Supabase Postgres com RLS isolado por loja. Você exporta JSON quando quiser e é dono do WhatsApp e da base.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta" style="padding-top:28px">
+  <div class="container">
+    <div class="card reveal" style="background:linear-gradient(135deg, #ff4722 0%, #f5b63b 100%);border:none;color:white;padding:36px;text-align:center;overflow:hidden;position:relative">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 600px 400px at 70% 20%, rgba(255,255,255,0.18), transparent 60%)"></div>
+      <div style="position:relative">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;opacity:0.9">garantia</div>
+        <h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(24px,4vw,40px);line-height:0.95;letter-spacing:-0.03em;margin:8px 0 10px">Teste 7 dias com seu link real.<br>Se não receber 1 pedido organizado, devolvemos.</h2>
+        <p style="opacity:0.9;max-width:56ch;margin:0 auto 18px;line-height:1.6">Seu cardápio vira vendedor 24h. O cliente pede sozinho, você só confirma no WhatsApp.</p>
+        <form id="leadForm" style="max-width:520px;margin:0 auto;display:grid;gap:10px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <input required name="nome" placeholder="Seu nome" style="padding:14px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.25);background:rgba(255,255,255,0.92);color:#111;font-size:14px">
+            <input required name="whats" placeholder="WhatsApp (11) 99999-9999" style="padding:14px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.25);background:rgba(255,255,255,0.92);color:#111;font-size:14px">
+          </div>
+          <input name="loja" placeholder="Nome da loja (ex: Bella Massa)" style="padding:14px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.25);background:rgba(255,255,255,0.92);color:#111;font-size:14px">
+          <button type="submit" class="btn" style="background:white;color:#ff4722;font-weight:800;width:100%">Quero meu cardápio no ar hoje — R$29/mês</button>
+          <div style="font-size:11px;opacity:0.85">Ao enviar você recebe o link no WhatsApp. Sem spam, sem fidelidade.</div>
+        </form>
+        <div id="formOk" style="display:none;margin-top:16px;background:white;color:#111;padding:14px;border-radius:12px;font-weight:700">Recebemos! Vamos te chamar no WhatsApp em minutos para ativar seu link.</div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container" style="display:flex;gap:18px;flex-wrap:wrap;justify-content:space-between;align-items:center">
+    <div>© 2026 Cardápio WhatsApp • Tecnologia Supabase • Dados isolados por loja (RLS) • Sem comissão</div>
+    <div style="display:flex;gap:14px"><a href="#demo">Demonstração</a><a href="#painel">Painel</a><a href="DOCUMENTACAO_VENDA_SITE.md">Documentação</a></div>
+  </div>
+</footer>
+
+<script>
+// split text for choreography
+function splitBand(band){
+  band.querySelectorAll('[data-split]').forEach(el=>{
+    const text = el.textContent;
+    el.setAttribute('aria-label', text);
+    const words = text.split(' ');
+    el.innerHTML = '';
+    words.forEach((w,i)=>{
+      const ws = document.createElement('span');
+      ws.className='w';
+      // seed random
+      const seed = (i*1664525+1013904223)>>>0;
+      const rnd = (seed>>>0)/4294967296;
+      ws.style.setProperty('--th', (i/words.length*0.35 + rnd*0.06).toFixed(3));
+      // chars
+      [...w].forEach((ch,ci)=>{
+        const cs=document.createElement('span');
+        cs.className='c';
+        cs.textContent=ch;
+        const jx=(Math.random()-0.5)*24;
+        const jy=(Math.random()-0.5)*24;
+        const jr=(Math.random()-0.5)*10;
+        cs.style.setProperty('--th', (Math.random()*0.55).toFixed(3));
+        cs.style.setProperty('--jx', jx.toFixed(1)+'px');
+        cs.style.setProperty('--jy', jy.toFixed(1)+'px');
+        cs.style.setProperty('--jr', jr.toFixed(1)+'deg');
+        ws.appendChild(cs);
+      });
+      el.appendChild(ws);
+      el.appendChild(document.createTextNode(' '));
+    });
+    el.setAttribute('aria-hidden','true');
+  });
+}
+document.querySelectorAll('.band').forEach(splitBand);
+
+// hero scrub system
+const VIDEO_URL='assets/hero-scrub.mp4';
+const VIDEO_BYTES=4824450;
+const posterLayer=document.getElementById('poster');
+const video=document.getElementById('heroVideo');
+const stage=document.getElementById('stage');
+const hero=document.getElementById('hero');
+const bands=[...document.querySelectorAll('.band')];
+const ring=document.querySelector('.ring');
+const hudText=document.getElementById('hudText');
+let scrubOn=false, rafId=null, lastTick=0;
+let target=0, shown=0;
+let seekBusy=false, pendingTime=null;
+let heroOnScreen=true;
+const GATES=[
+  '(max-width: 720px)',
+  '(orientation: portrait) and (max-width: 1024px)',
+  '(orientation: portrait) and (pointer: coarse)',
+  '(orientation: landscape) and (pointer: coarse) and (max-height: 560px)',
+  '(prefers-reduced-motion: reduce)'
+];
+function heroProgress(){
+  const rect=hero.getBoundingClientRect();
+  const total=hero.offsetHeight - window.innerHeight;
+  const p = Math.min(1, Math.max(0, -rect.top / (total||1)));
+  return p;
+}
+function updateCaptions(p){
+  const now=performance.now();
+  bands.forEach((b,i)=>{
+    const range=b.dataset.range.split(',').map(Number);
+    const a=range[0], bb=range[1];
+    const f=Math.min(0.02,(bb-a)/3);
+    const smoothstep=(p,e0,e1)=>{const t=Math.min(1,Math.max(0,(p-e0)/(e1-e0)));return t*t*(3-2*t)};
+    let opacity = smoothstep(p,a,a+f) * (1 - smoothstep(p,bb-f,bb));
+    if(i===0) opacity = 1 - smoothstep(p, bb-f, bb);
+    if(i===bands.length-1) opacity = smoothstep(p,a,a+f);
+    if(bands.length===1) opacity=1;
+    // clamp
+    opacity=Math.max(0,Math.min(1,opacity));
+    if(b.op===opacity) {} else { b.style.opacity=opacity; b.op=opacity; }
+    const ramp = parseFloat(b.dataset.ramp)|| Math.min(0.025,(bb-a)*0.35);
+    const k = Math.min(1,Math.max(0,(p - a)/(ramp||0.025)));
+    // first band load ramp
+    let kk=k;
+    if(i===0 && window._loadK!==undefined) kk=Math.max(k, window._loadK);
+    if(Math.abs((b.k||-1)-kk) > 0.008){ b.style.setProperty('--k', kk.toFixed(3)); b.k=kk; }
+    // per char/word transform based on --k
+    // drive .c opacity/transform via CSS var --kc per char? we use --k on band and CSS uses --k and --th
+    // update label throttle example
+  });
+  // hud
+  if(now - (updateCaptions._last||0) > 100){
+    updateCaptions._last=now;
+    const txt = `scroll ${(p*100).toFixed(0)}%`;
+    if(hudText.textContent!==txt) hudText.textContent=txt;
+  }
+}
+function requestSeek(t){
+  if(!video.duration) return;
+  if(seekBusy){ pendingTime=t; return; }
+  seekBusy=true;
+  try{ video.currentTime=t; }catch(e){ seekBusy=false; }
+}
+video.addEventListener('seeked',()=>{
+  seekBusy=false;
+  if(pendingTime!==null){ const t=pendingTime; pendingTime=null; requestSeek(t); }
+});
+video.addEventListener('error',()=>{ seekBusy=false; pendingTime=null; });
+function tick(now){
+  const dt=Math.min(100, now-(lastTick||now));
+  lastTick=now;
+  const k=0.16;
+  shown += (target - shown)*(1 - Math.pow(1-k, dt/16.667));
+  if(Math.abs(target-shown)<0.0005){ shown=target; rafId=null; lastTick=0; }
+  else rafId=requestAnimationFrame(tick);
+  requestSeek(shown * (video.duration||6));
+  updateCaptions(shown);
+}
+function onScroll(){
+  target=heroProgress();
+  if(rafId===null && heroOnScreen && video.duration) rafId=requestAnimationFrame(tick);
+}
+// blob loader with ring
+let started=false;
+function startBlobFetch(){
+  if(started) return; started=true;
+  loadHeroBlob().catch(failVideo);
+}
+posterLayer.style.backgroundImage="url('assets/hero-poster.jpg')";
+const posterImg=new Image();
+posterImg.onload=startBlobFetch;
+posterImg.onerror=startBlobFetch;
+posterImg.src='assets/hero-poster.jpg';
+setTimeout(startBlobFetch,4000);
+
+async function loadHeroBlob(){
+  const ctrl=new AbortController();
+  let watchdog=setTimeout(()=>ctrl.abort(),20000);
+  const res=await fetch(VIDEO_URL,{priority:'low',signal:ctrl.signal});
+  if(!res.ok) throw new Error('fetch fail');
+  const total=Number(res.headers.get('Content-Length'))||VIDEO_BYTES;
+  const reader=res.body.getReader();
+  const chunks=[]; let got=0, lastRing=0;
+  for(;;){
+    const {done,value}=await reader.read();
+    if(done) break;
+    clearTimeout(watchdog);
+    watchdog=setTimeout(()=>ctrl.abort(),20000);
+    chunks.push(value);
+    got+=value.length;
+    const frac=Math.min(1,got/total);
+    const now=performance.now();
+    if(now-lastRing>100||frac===1){
+      lastRing=now;
+      ring.style.setProperty('--ld', Math.round(126*(1-frac)));
+    }
+  }
+  clearTimeout(watchdog);
+  ring.style.setProperty('--ld',0);
+  video.src=URL.createObjectURL(new Blob(chunks));
+  video.load();
+  video.addEventListener('canplay',()=>{
+    requestSeek(heroProgress()*video.duration);
+    stage.classList.add('video-ready');
+    hudText.textContent='jornada pronta';
+    setTimeout(()=>{ document.getElementById('hud').style.opacity='0.6'; },1200);
+    // init tick
+    onScroll();
+    updateCaptions(heroProgress());
+  },{once:true});
+}
+function failVideo(){
+  ring.replaceWith(Object.assign(document.createElement('div'),{innerHTML:'↓',style:'width:48px;height:48px;display:grid;place-items:center;border:1px solid rgba(255,255,255,0.2);border-radius:50%'}));
+  stage.classList.add('video-failed');
+  hudText.textContent='imagem estática';
+}
+function enableScrub(){
+  if(scrubOn) return; scrubOn=true;
+  if(!started) startBlobFetch();
+  addEventListener('scroll',onScroll,{passive:true});
+  bands.forEach(b=>{b.op=-1;b.k=-1});
+  unpinFinalStates();
+  updateCaptions(heroProgress());
+  onScroll();
+}
+function disableScrub(){
+  if(!scrubOn) return; scrubOn=false;
+  removeEventListener('scroll',onScroll);
+  if(rafId!==null){cancelAnimationFrame(rafId);rafId=null}
+}
+function applyHeroMode(){
+  if(GATES.some(q=>matchMedia(q).matches)) disableScrub();
+  else enableScrub();
+}
+const MQLS=GATES.map(q=>matchMedia(q));
+MQLS.forEach(m=>m.addEventListener('change',applyHeroMode));
+applyHeroMode();
+// hero on screen observer
+new IntersectionObserver(es=>{heroOnScreen=es[0].isIntersecting; if(!heroOnScreen && rafId){cancelAnimationFrame(rafId);rafId=null} else if(heroOnScreen && scrubOn) onScroll();},{threshold:0}).observe(hero);
+// initial loadK for first band
+let loadK=0;
+window._loadK=0;
+const loadStart=performance.now();
+(function loadRamp(){
+  const t=Math.min(1,(performance.now()-loadStart)/900);
+  window._loadK=t;
+  updateCaptions(heroProgress());
+  if(t<1) requestAnimationFrame(loadRamp);
+})();
+// reduced motion pin
+function pinToFinalStates(){
+  bands.forEach(b=>{b.style.opacity=1; b.style.setProperty('--k',1)});
+  document.querySelectorAll('.reveal,.stagger').forEach(el=>el.classList.add('in'));
+}
+function unpinFinalStates(){
+  bands.forEach(b=>{b.style.opacity='';});
+  // reveal will be handled by observer
+}
+matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',e=>{
+  if(e.matches) pinToFinalStates();
+  else applyHeroMode();
+});
+// reveal observer
+const io=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) e.target.classList.add('in');
+  });
+},{threshold:0.18});
+document.querySelectorAll('.reveal,.stagger').forEach(el=>io.observe(el));
+document.addEventListener('visibilitychange',()=>{
+  const paused=document.hidden;
+  document.body.classList.toggle('paused',paused);
+  if(paused && rafId){cancelAnimationFrame(rafId);rafId=null}
+});
+// pizza lab
+const btn=document.getElementById('holdBtn');
+const prog=document.getElementById('progress');
+const slice=document.getElementById('sliceText');
+const pizza=document.getElementById('pizza');
+const labStatus=document.getElementById('labStatus');
+let holdRaf=null, holdVal=0, holding=false, dir=1;
+function drawPizza(v){
+  if(v<0.01){ pizza.style.background='#f0d9a8'; slice.textContent='Segure para montar'; slice.style.color='#5a2a12'; return; }
+  if(v<0.5){
+    pizza.style.background=`conic-gradient(#ff6b35 0 ${v*2*180}deg, #f0d9a8 ${v*2*180}deg 360deg)`;
+    slice.textContent='½ Calabresa';
+  } else if(v<0.85){
+    pizza.style.background=`conic-gradient(#ff6b35 0 180deg, #ffcc33 180deg 360deg)`;
+    slice.textContent='½ Calabresa + ½ Frango';
+  } else {
+    pizza.style.background=`conic-gradient(#ff6b35 0 180deg, #ffcc33 180deg 360deg)`;
+    pizza.style.boxShadow='inset 0 0 0 8px #e9b77a, 0 0 0 4px #ff4722, 0 12px 30px rgba(0,0,0,0.35)';
+    slice.textContent='R$ 58,90 + borda R$6';
+    slice.style.color='white';
+    slice.style.textShadow='0 1px 4px rgba(0,0,0,0.6)';
+  }
+}
+function loopHold(){
+  if(holding) holdVal=Math.min(1, holdVal+0.018);
+  else holdVal=Math.max(0, holdVal-0.03);
+  prog.style.width=(holdVal*100)+'%';
+  drawPizza(holdVal);
+  if(holdVal>0.98) labStatus.textContent='pronto! preço = maior sabor + borda, validado';
+  else if(holding) labStatus.textContent='montando fração inteligente...';
+  else if(holdVal>0) labStatus.textContent='solte cedo e desmonta suave';
+  else labStatus.textContent='segure e veja a pizza ganhar dois sabores e preço certo';
+  if(holdVal>0 || holding) holdRaf=requestAnimationFrame(loopHold);
+  else holdRaf=null;
+}
+function startHold(e){ e.preventDefault(); if(matchMedia('(prefers-reduced-motion: reduce)').matches){ holdVal=1; drawPizza(1); prog.style.width='100%'; labStatus.textContent='pronto (movimento reduzido)'; return; } holding=true; if(!holdRaf) loopHold(); }
+function endHold(){ holding=false; if(!holdRaf) loopHold(); }
+btn.addEventListener('mousedown',startHold); btn.addEventListener('touchstart',startHold,{passive:false});
+addEventListener('mouseup',endHold); addEventListener('touchend',endHold);
+// form
+const form=document.getElementById('leadForm');
+const ok=document.getElementById('formOk');
+form.addEventListener('submit',e=>{
+  e.preventDefault();
+  const data=new FormData(form);
+  const nome=data.get('nome');
+  const whats=data.get('whats').replace(/\D/g,'');
+  const loja=data.get('loja')||'sua loja';
+  const text=`Olá! Quero meu cardápio no ar. Loja: ${loja} | Nome: ${nome} | Whats: ${whats}`;
+  // mailto fallback + wa.me
+  const wa=`https://wa.me/55${whats}?text=${encodeURIComponent(text)}`;
+  form.style.display='none';
+  ok.style.display='block';
+  ok.innerHTML=`Recebemos, ${nome}! Abrindo WhatsApp para confirmar. <br><a href="${wa}" target="_blank" style="color:#ff4722">Abrir WhatsApp agora</a> — ou aguarde nosso contato.`;
+  // opcional: mailto
+  // window.open(wa,'_blank');
+});
+// focus visible
+document.addEventListener('keydown',e=>{ if(e.key==='Tab') document.body.classList.add('kb'); });
+</script>
+</body>
+</html>

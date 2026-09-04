@@ -1,0 +1,13 @@
+# Ignorar material de apoio / bruto (não vai para o Pages)
+DonaLia/
+review/
+site-de-10k/
+*.mp4
+!cardapio-venda/assets/*.mp4
+1.jpg
+2.mp4
+3.mp4
+
+# Sistema
+.DS_Store
+Thumbs.db
