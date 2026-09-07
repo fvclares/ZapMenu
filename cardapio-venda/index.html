@@ -428,32 +428,54 @@ chega organizado no seu WhatsApp</div>
       </div>
     </div>
 
-    <!-- pizza lab interativo -->
-    <div class="pizza-lab reveal" style="margin-top:22px">
-      <div class="lab-visual">
-        <div class="tag">veja funcionando</div>
-        <div class="pizza" id="pizza"><div class="slice" id="sliceText">Segure para montar</div></div>
-        <button class="hold-btn" id="holdBtn">Segurar para montar ½ Calabresa + ½ Frango com borda Catupiry</button>
-        <div class="progress"><i id="progress"></i></div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-secondary)" id="labStatus">segure e veja a pizza ganhar dois sabores e preço certo</div>
+    <!-- por que escolher zapmenu vs sistemas complexos R$120 -->
+    <div class="reveal" style="margin-top:22px;background:linear-gradient(180deg, #1C212E 0%, #141821 100%);border:1px solid rgba(255,71,34,0.18);border-radius:24px;overflow:hidden">
+      <div style="padding:28px 28px 0 28px">
+        <div class="eyebrow">por que o simples vence — sem R$ 120/mês</div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;margin:6px 0 10px;font-size:clamp(22px,3.2vw,32px);line-height:1.05;letter-spacing:-0.03em">Por que escolher o ZapMenu em vez de sistemas complexos de <em style="color:var(--accent);font-style:normal">R$ 120/mês?</em></h3>
+        <p style="color:var(--text-secondary);font-size:15px;line-height:1.6;margin:0;max-width:68ch">O ZapMenu foi feito para quem quer organizar o delivery sem complicar a vida do cliente e sem comprometer a margem de lucro do restaurante. Veja por que a simplicidade do ZapMenu funciona melhor no dia a dia:</p>
       </div>
-      <div style="padding:28px">
-        <div class="eyebrow">exemplo para pizzaria — funciona para todo cardápio</div>
-        <h3 style="font-family:'Space Grotesk',sans-serif;margin:6px 0 10px;font-size:22px">Monte sua pizza do seu jeito</h3>
-        <p style="color:var(--text-secondary);font-size:14px;line-height:1.6;margin:0 0 10px">Exemplo com pizza para mostrar a flexibilidade. Hambúrguer, esfirra, marmita, açaí e doces usam a mesma lógica. O pedido chega completo no seu WhatsApp.</p>
-        <ul style="color:var(--text-secondary);font-size:14px;line-height:1.7;margin:0;padding-left:18px">
-          <li>Pizza inteira, meia, terço ou quarto — quantidade de sabores configurável</li>
-          <li>Bordas e adicionais com preço de cada um</li>
-          <li>Cada tamanho com seu preço</li>
-          <li>Você escolhe como calcular a pizza meio a meio</li>
-          <li>Não deixa enviar pizza pela metade</li>
-          <li>Para outros produtos: variações simples de tamanho, adicionais e observação funcionam igual</li>
-        </ul>
-        <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
-          <span class="chip">sabores configuráveis</span><span class="chip">bordas</span><span class="chip">adicionais</span>
+      <div class="grid" style="grid-template-columns:1fr 1fr;gap:14px;padding:22px 28px 28px 28px">
+        <div class="card" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);padding:20px">
+          <div style="width:36px;height:36px;border-radius:10px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.25);display:grid;place-items:center;font-size:16px">💸</div>
+          <h4 style="margin:12px 0 6px;font-family:'Space Grotesk',sans-serif;font-size:16px;line-height:1.3">O dinheiro é seu, na hora</h4>
+          <p style="color:var(--text-secondary);font-size:13.5px;line-height:1.6;margin:0">Você recebe o <strong style="color:var(--text-primary)">PIX direto na sua conta</strong> e o cartão na sua própria maquininha. Nada de esperar semanas para a plataforma repassar o seu faturamento ou pagar taxas extras por antecipação.</p>
+        </div>
+        <div class="card" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);padding:20px">
+          <div style="width:36px;height:36px;border-radius:10px;background:rgba(245,182,59,0.15);border:1px solid rgba(245,182,59,0.25);display:grid;place-items:center;font-size:16px">💰</div>
+          <h4 style="margin:12px 0 6px;font-family:'Space Grotesk',sans-serif;font-size:16px;line-height:1.3">Sem comissões nem surpresas</h4>
+          <p style="color:var(--text-secondary);font-size:13.5px;line-height:1.6;margin:0">Apenas <strong style="color:var(--text-primary)">R$ 29 fixos por mês</strong>. Enquanto plataformas completas cobram mensalidades de R$ 120 ou mais — além de abocanhar porcentagens sobre cada transação no cartão —, no ZapMenu <strong style="color:var(--text-primary)">100% do valor da venda fica com você</strong>.</p>
+        </div>
+        <div class="card" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);padding:20px">
+          <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,71,34,0.15);border:1px solid rgba(255,71,34,0.25);display:grid;place-items:center;font-size:16px">⚡</div>
+          <h4 style="margin:12px 0 6px;font-family:'Space Grotesk',sans-serif;font-size:16px;line-height:1.3">Sem barreiras na hora de comprar</h4>
+          <p style="color:var(--text-secondary);font-size:13.5px;line-height:1.6;margin:0">O cliente <strong style="color:var(--text-primary)">não precisa baixar aplicativo, criar conta</strong> nem digitar dados confidenciais do cartão em um site desconhecido. Ele abre o link, escolhe em 3 toques e envia. A taxa de desistência no checkout é praticamente zero.</p>
+        </div>
+        <div class="card" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);padding:20px">
+          <div style="width:36px;height:36px;border-radius:10px;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.25);display:grid;place-items:center;font-size:16px">💬</div>
+          <h4 style="margin:12px 0 6px;font-family:'Space Grotesk',sans-serif;font-size:16px;line-height:1.3">Atendimento mais próximo e humano</h4>
+          <p style="color:var(--text-secondary);font-size:13.5px;line-height:1.6;margin:0">O pedido chega <strong style="color:var(--text-primary)">perfeitamente calculado e organizado no seu WhatsApp</strong>, mantendo o canal direto de comunicação aberto. Você confirma a entrega com a simpatia de sempre, sem perder o toque humano que fideliza a vizinhança.</p>
+        </div>
+        <div class="card" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);padding:20px;grid-column:1 / -1;display:flex;gap:16px;align-items:flex-start">
+          <div style="width:36px;height:36px;border-radius:10px;background:rgba(168,85,247,0.15);border:1px solid rgba(168,85,247,0.25);display:grid;place-items:center;font-size:16px;flex-shrink:0">🛡️</div>
+          <div>
+            <h4 style="margin:0 0 6px;font-family:'Space Grotesk',sans-serif;font-size:16px;line-height:1.3">Simplicidade que não trava a operação</h4>
+            <p style="color:var(--text-secondary);font-size:13.5px;line-height:1.6;margin:0">Sistemas com checkout integrado exigem formulários longos e dependem de aprovação de gateway de pagamento que pode falhar no meio do horário de pico. Com o ZapMenu, o <strong style="color:var(--text-primary)">fluxo é simples, direto e à prova de falhas</strong>.</p>
+          </div>
         </div>
       </div>
+      <div style="padding:0 28px 22px 28px;display:flex;gap:8px;flex-wrap:wrap">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 10px;border-radius:999px;background:rgba(255,71,34,0.12);border:1px solid rgba(255,71,34,0.22);color:var(--text-secondary)">R$29 fixo • sem comissão</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid var(--line);color:var(--text-secondary)">100% da venda é sua</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid var(--line);color:var(--text-secondary)">sem app • 3 toques</span>
+      </div>
     </div>
+    <style>
+      @media(max-width:700px){
+        #funciona .grid[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr !important}
+        #funciona .grid[style*="grid-template-columns:1fr 1fr"] > div[style*="grid-column:1 / -1"]{grid-column:auto !important}
+      }
+    </style>
   </div>
 </section>
 
@@ -840,12 +862,13 @@ document.addEventListener('visibilitychange',()=>{
   document.body.classList.toggle('paused',paused);
   if(paused && rafId){cancelAnimationFrame(rafId);rafId=null}
 });
-// pizza lab
+// pizza lab removido - bloco substituido por "Por que escolher o ZapMenu"
 const btn=document.getElementById('holdBtn');
 const prog=document.getElementById('progress');
 const slice=document.getElementById('sliceText');
 const pizza=document.getElementById('pizza');
 const labStatus=document.getElementById('labStatus');
+if(btn && prog && slice && pizza && labStatus){
 let holdRaf=null, holdVal=0, holding=false, dir=1;
 function drawPizza(v){
   if(v<0.01){ pizza.style.background='#f0d9a8'; slice.textContent='Segure para montar'; slice.style.color='#5a2a12'; return; }
@@ -879,6 +902,7 @@ function startHold(e){ e.preventDefault(); if(matchMedia('(prefers-reduced-motio
 function endHold(){ holding=false; if(!holdRaf) loopHold(); }
 btn.addEventListener('mousedown',startHold); btn.addEventListener('touchstart',startHold,{passive:false});
 addEventListener('mouseup',endHold); addEventListener('touchend',endHold);
+}
 // form 7 dias - apenas nome e e-mail (mobile otimizado)
 const form=document.getElementById('leadForm');
 const ok=document.getElementById('formOk');
