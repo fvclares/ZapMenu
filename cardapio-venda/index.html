@@ -207,6 +207,15 @@ section{position:relative;padding:84px 0}
 .hero-hud,.cue{display:none !important}
 .phone-mock{display:none !important}
 .band[data-range="0.16,0.32"],.band[data-range="0.36,0.52"],.band[data-range="0.58,0.82"]{display:none !important}
+/* fix mobile: desativa coreografia que quebrava texto no WebView Instagram */
+@media (max-width:720px),(orientation:portrait) and (max-width:1024px),(orientation:portrait) and (pointer:coarse){
+  .band .w,.band .c{transform:none !important;opacity:1 !important;will-change:auto !important}
+  .band h2,.band p{overflow-wrap:anywhere;word-break:normal}
+}
+@media (max-width:720px){
+  .band h2{font-size:clamp(28px,8vw,36px)}
+  .band p{font-size:15px;line-height:1.5}
+}
 /* CTA 7 dias - mobile otimizado */
 #leadForm{width:100%}
 #leadForm .lead-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -642,7 +651,10 @@ function splitBand(band){
     el.setAttribute('aria-hidden','true');
   });
 }
-document.querySelectorAll('.band').forEach(splitBand);
+// só ativa coreografia se houver vídeo (modo scrub) — no modo estático quebra no WebView
+if(document.getElementById('heroVideo')){
+  document.querySelectorAll('.band').forEach(splitBand);
+}
 
 // hero scrub system
 const VIDEO_URL='assets/hero-scrub.mp4';
