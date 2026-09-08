@@ -13,7 +13,7 @@
 <meta property="og:title" content="ZapMenu — Seu cliente monta o pedido. Você recebe pronto no WhatsApp.">
 <meta property="og:description" content="Cardápio digital para todo ramo alimentício. Cliente monta o pedido e você recebe organizado no WhatsApp. Pagamento na maquininha ou PIX da sua loja. Sem comissão.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://fvclares.github.io/ZapMenu/assets/hero-poster.jpg">
+<meta property="og:image" content="https://fvclares.github.io/ZapMenu/assets/caos-01.jpg">
 <meta property="og:url" content="https://fvclares.github.io/ZapMenu/">
 <style>
 :root{
@@ -258,10 +258,7 @@ footer{padding:32px 0;border-top:1px solid var(--line);color:var(--text-tertiary
             <a class="btn btn-accent" href="#cta">Testar grátis por 7 dias</a>
             <a class="btn btn-ghost" href="https://fvclares.github.io/cardapioonline/index.html?store=napolle" target="_blank" rel="noopener">Ver um cardápio funcionando</a>
           </div>
-          <div style="margin-top:18px">
-            <img src="assets/cardapio-paes.jpg" alt="Prévia do cardápio: buscar sabor, categorias Pães, Tapiocas, Cuscuz e produto #101 Pão com Margarina" loading="lazy" style="width:100%;max-width:520px;border-radius:16px;border:1px solid var(--line);box-shadow:0 12px 30px rgba(0,0,0,0.35);object-fit:cover">
-            <div style="margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-tertiary)">prévia real do cardápio • categorias e busca instantânea</div>
-          </div>
+
         </div>
       </div>
       <!-- 2 -->
@@ -359,7 +356,7 @@ footer{padding:32px 0;border-top:1px solid var(--line);color:var(--text-tertiary
         <div class="tag">o que chega no WhatsApp</div>
         <h3 style="font-family:'Space Grotesk',sans-serif;margin:8px 0 6px">Olha o que chega no seu WhatsApp</h3>
         <p style="color:var(--text-secondary);font-size:14px;line-height:1.6;margin:0 0 12px">Em vez de ficar perguntando tamanho, sabor, endereço e pagamento, você recebe o pedido já organizado.</p>
-        <video src="assets/demo-pedido.mp4" autoplay muted loop playsinline controls style="width:100%;border-radius:14px;border:1px solid var(--line);max-height:520px;object-fit:cover"></video>
+        <div style="width:100%;border-radius:14px;border:1px dashed var(--line);background:rgba(255,255,255,0.04);padding:24px;text-align:center;color:var(--text-secondary);font-size:13px;line-height:1.6">Vídeo removido — o pedido continua chegando organizado no seu WhatsApp (veja o exemplo abaixo).</div>
         <div class="wa" style="margin-top:12px">*NOVO PEDIDO #1042* — Napollê
 ────────────────────────
 🍕 1x Grande ½ Calabresa + ½ Frango c/ Catupiry — R$ 58,90
@@ -560,7 +557,7 @@ chega organizado no seu WhatsApp</div>
           <p style="margin:8px 0 0;color:var(--text-secondary);font-size:14px;line-height:1.6">Pizzaria, hamburgueria, esfirraria, marmitaria, açaí, doceria e restaurante. Se você vende por WhatsApp, o ZapMenu organiza o pedido para você.</p>
         </div>
         <div class="card" style="display:flex;gap:12px;align-items:center">
-          <img src="assets/hero-ending.jpg" alt="" style="width:64px;height:64px;border-radius:10px;object-fit:cover;border:1px solid var(--line)">
+          <div style="width:64px;height:64px;border-radius:10px;background:linear-gradient(135deg,#ff4722,#f5b63b);display:grid;place-items:center;font-size:28px;flex-shrink:0;border:1px solid var(--line)">🍕</div>
           <div style="font-size:13px;color:var(--text-secondary);line-height:1.5"><strong style="color:white">Pare de montar pedido no WhatsApp</strong><br>Seu cliente escolhe tudo no cardápio. Você só confere, confirma e cobra na sua maquininha ou PIX.</div>
         </div>
       </div>
@@ -669,7 +666,7 @@ const ring=document.querySelector('.ring');
 const hudText=document.getElementById('hudText');
 // VIDEO DE FUNDO REMOVIDO - modo estatico sem scrub para evitar conflito de scroll
 if(!video){
-  if(posterLayer) posterLayer.style.backgroundImage="url('assets/hero-poster.jpg')";
+  if(posterLayer) posterLayer.style.backgroundImage="none";
   // garante primeira banda visivel
   bands.forEach(b=>{b.style.opacity=1; b.style.setProperty('--k',1)});
 } else {
@@ -752,12 +749,8 @@ function startBlobFetch(){
   if(started) return; started=true;
   loadHeroBlob().catch(failVideo);
 }
-posterLayer.style.backgroundImage="url('assets/hero-poster.jpg')";
-const posterImg=new Image();
-posterImg.onload=startBlobFetch;
-posterImg.onerror=startBlobFetch;
-posterImg.src='assets/hero-poster.jpg';
-setTimeout(startBlobFetch,4000);
+posterLayer.style.backgroundImage="none";
+setTimeout(startBlobFetch,100);
 
 async function loadHeroBlob(){
   const ctrl=new AbortController();
@@ -848,7 +841,7 @@ matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',e=>{
 });
 } // fim do else do modo video
 // garante poster estatico mesmo sem video
-if(!video && posterLayer) posterLayer.style.backgroundImage="url('assets/hero-poster.jpg')";
+if(!video && posterLayer) posterLayer.style.backgroundImage="none";
 // reveal observer
 const io=new IntersectionObserver((entries)=>{
   entries.forEach(e=>{
