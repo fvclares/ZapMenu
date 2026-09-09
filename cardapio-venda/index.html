@@ -925,8 +925,31 @@ function isValidBRPhone(v){
 (function attachPhoneMask(){
   const tel=form && form.querySelector('[name="whatsapp"]');
   if(!tel) return;
-  tel.addEventListener('input', ()=>{ const p=tel.selectionStart; tel.value=formatBRPhone(tel.value); try{ tel.setSelectionRange(p+1,p+1);}catch{} });
-  tel.addEventListener('blur', ()=>{ tel.value=formatBRPhone(tel.value); });
+  function setCursorByDigits(formatted, digitsBefore){
+    if(digitsBefore===0) return 0;
+    let seen=0;
+    for(let i=0;i<formatted.length;i++){
+      if(/\d/.test(formatted[i])) seen++;
+      if(seen===digitsBefore) return i+1;
+    }
+    return formatted.length;
+  }
+  tel.addEventListener('input', ()=>{
+    const start=tel.selectionStart;
+    const end=tel.selectionEnd;
+    const raw=tel.value;
+    // conta quantos dígitos havia antes do cursor antes de formatar
+    const digitsBefore = onlyDigits(raw.slice(0, start)).length;
+    const formatted=formatBRPhone(raw);
+    if(raw===formatted) return;
+    tel.value=formatted;
+    // se usuário estava digitando no final (caso mais comum), mantém no final; senão preserva posição por contagem de dígitos
+    const atEnd = start===raw.length && end===raw.length;
+    const newPos = atEnd ? formatted.length : setCursorByDigits(formatted, digitsBefore);
+    // requestAnimationFrame evita briga com o browser no Android/iOS
+    requestAnimationFrame(()=>{ try{ tel.setSelectionRange(newPos, newPos); }catch{} });
+  });
+  tel.addEventListener('blur', ()=>{ const f=formatBRPhone(tel.value); if(f!==tel.value) tel.value=f; });
 })();
 form.addEventListener('submit', async e=>{
   e.preventDefault();
