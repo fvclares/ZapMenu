@@ -594,13 +594,19 @@ chega organizado no seu WhatsApp</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;opacity:0.9">7 dias grátis • sem fidelidade</div>
         <h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(24px,4vw,40px);line-height:0.95;letter-spacing:-0.03em;margin:8px 0 10px">Teste seu próprio cardápio por 7 dias.</h2>
         <p style="opacity:0.9;max-width:56ch;margin:0 auto 18px;line-height:1.6">Coloque seus produtos, divulgue seu link e veja como seus pedidos chegam organizados no WhatsApp. Se não fizer sentido para sua loja, não continue pagando.</p>
-        <form id="leadForm" style="max-width:520px;margin:0 auto;display:grid;gap:10px" novalidate>
+        <form id="leadForm" action="https://formsubmit.co/fvclares@gmail.com" method="POST" style="max-width:520px;margin:0 auto;display:grid;gap:10px" novalidate>
+          <!-- Fallback sem JS: FormSubmit envia para fvclares@gmail.com -->
+          <input type="hidden" name="_subject" value="ZapMenu - Novo pedido TESTE 7 DIAS">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_next" value="https://fvclares.github.io/ZapMenu/#cta">
+          <input type="text" name="_honey" style="display:none">
           <div class="lead-grid">
             <input required name="nome" type="text" autocomplete="name" placeholder="Seu nome" aria-label="Seu nome" style="padding:14px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.25);background:rgba(255,255,255,0.92);color:#111;font-size:16px">
             <input required name="email" type="email" autocomplete="email" inputmode="email" placeholder="Seu melhor e-mail" aria-label="Seu e-mail" style="padding:14px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.25);background:rgba(255,255,255,0.92);color:#111;font-size:16px">
           </div>
           <button type="submit" class="btn" style="background:white;color:#ff4722;font-weight:800;width:100%;min-height:48px">Começar meus 7 dias grátis →</button>
-          <div style="font-size:11px;opacity:0.85">Acesso imediato • Sem cartão • Sem spam • Cancele quando quiser</div>
+          <div style="font-size:11px;opacity:0.85">Acesso imediato • Sem cartão • Sem spam • Cancele quando quiser<br><span style="opacity:0.9">Dúvida? <a href="https://wa.me/55919822767763?text=Ol%C3%A1%21%20Quero%20testar%20o%20ZapMenu%20por%207%20dias%20gr%C3%A1tis." target="_blank" rel="noopener" style="color:white;text-decoration:underline">Falar no WhatsApp (91) 98227-67763</a> • <a href="mailto:fvclares@gmail.com" style="color:white;text-decoration:underline">fvclares@gmail.com</a></span></div>
         </form>
         <div id="formOk" style="display:none;margin-top:16px;background:white;color:#111;padding:14px;border-radius:12px;font-weight:700;text-align:left">✓ Recebemos, obrigado! Entraremos em contato em breve para liberar seu acesso de 7 dias. Fique de olho no seu e-mail (e no spam).</div>
       </div>
@@ -897,24 +903,75 @@ function endHold(){ holding=false; if(!holdRaf) loopHold(); }
 btn.addEventListener('mousedown',startHold); btn.addEventListener('touchstart',startHold,{passive:false});
 addEventListener('mouseup',endHold); addEventListener('touchend',endHold);
 }
-// form 7 dias - apenas nome e e-mail (mobile otimizado)
+// form 7 dias - FIX: agora envia de verdade para fvclares@gmail.com + WhatsApp 55919822767763
 const form=document.getElementById('leadForm');
 const ok=document.getElementById('formOk');
-form.addEventListener('submit',e=>{
+form.addEventListener('submit', async e=>{
   e.preventDefault();
   const data=new FormData(form);
-  const nome=(data.get('nome')||'').trim();
-  const email=(data.get('email')||'').trim();
+  const nome=(data.get('nome')||'').toString().trim();
+  const email=(data.get('email')||'').toString().trim();
   if(!nome || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
     const firstInvalid = !nome ? form.querySelector('[name="nome"]') : form.querySelector('[name="email"]');
     if(firstInvalid){ firstInvalid.focus(); firstInvalid.style.borderColor='#ff4722'; setTimeout(()=>firstInvalid.style.borderColor='rgba(255,255,255,0.25)',2000); }
     return;
   }
-  // salva lead local para posterior integracao (ex: backend, Sheet)
-  try{ localStorage.setItem('zapmenu_lead', JSON.stringify({nome,email,ts:Date.now()})); }catch{}
+  const btn=form.querySelector('button[type="submit"]');
+  const origBtnText=btn ? btn.textContent : '';
+  if(btn){ btn.disabled=true; btn.textContent='Enviando...'; btn.style.opacity='0.7'; btn.style.cursor='wait'; }
+
+  // salva local (debug / fallback)
+  try{ localStorage.setItem('zapmenu_lead', JSON.stringify({nome,email,ts:Date.now(),href:location.href})); }catch{}
+
+  // destinos oficiais
+  const DEST_EMAIL='fvclares@gmail.com';
+  const DEST_WA='55919822767763'; // +55 91 98227-67763
+
+  let emailOk=false;
+  let waLink='';
+  try{
+    const waText=`Ola! Quero testar o ZapMenu por 7 dias gratis.\n\nNome: ${nome}\nEmail: ${email}\nOrigem: ${location.href}\nData: ${new Date().toLocaleString('pt-BR')}`;
+    waLink=`https://wa.me/${DEST_WA}?text=${encodeURIComponent(waText)}`;
+  }catch{ waLink=`https://wa.me/${DEST_WA}`; }
+
+  // 1) Tenta enviar para fvclares@gmail.com via FormSubmit AJAX (GitHub Pages = sem backend, solucao gratuita)
+  // IMPORTANTE: no 1o envio o FormSubmit manda um e-mail de confirmação para fvclares@gmail.com — é só clicar em "Confirm" uma vez.
+  try{
+    const payload={
+      nome: nome,
+      email: email,
+      _subject: `ZapMenu - Novo pedido TESTE 7 DIAS: ${nome} <${email}>`,
+      _template: 'table',
+      _captcha: 'false',
+      _autoresponse: `Olá ${nome}! Recebemos seu pedido de teste de 7 dias do ZapMenu. Entraremos em contato em breve para liberar seu acesso. Fique de olho no e-mail (e spam).`,
+      mensagem: `Novo lead ZapMenu - Teste 7 dias\nNome: ${nome}\nEmail: ${email}\nData: ${new Date().toLocaleString('pt-BR')}\nOrigem: ${location.href}\nUserAgent: ${navigator.userAgent}`,
+      origem: location.href,
+      data: new Date().toISOString()
+    };
+    const res=await fetch('https://formsubmit.co/ajax/'+encodeURIComponent(DEST_EMAIL), {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    // FormSubmit retorna 200 mesmo sem confirmação inicial, mas pode retornar {success: "false", message: "Confirmation email sent"}
+    const j=await res.json().catch(()=>null);
+    emailOk = res.ok && (!j || j.success !== 'false' || (j.message||'').toLowerCase().includes('confirmation'));
+    // se for o 1o acesso (precisa confirmar), considerar como "enviado pendente de ativação" mas ainda mostrar sucesso
+    if(j && typeof j.message==='string' && j.message.toLowerCase().includes('confirmation')) emailOk=true;
+  }catch(err){
+    console.warn('FormSubmit falhou, fallback para WhatsApp/mailto', err);
+    emailOk=false;
+  }
+
   form.style.display='none';
   ok.style.display='block';
-  ok.innerHTML=`✓ Perfeito, ${nome}! Recebemos seu contato (<strong>${email}</strong>).<br><span style="font-weight:400;opacity:0.8">Entraremos em contato em breve para liberar seu acesso de 7 dias. Fique de olho no seu e-mail.</span><br><a href="https://fvclares.github.io/cardapioonline/index.html?store=napolle" target="_blank" style="color:#ff4722;text-decoration:underline">→ Enquanto isso, testar cardápio Napollê ao vivo</a>`;
+  if(emailOk){
+    ok.innerHTML=`✓ Perfeito, ${nome}! Recebemos seu contato (<strong>${email}</strong>).<br><span style="font-weight:400;opacity:0.8">Seu pedido de <strong>teste de 7 dias</strong> foi enviado para <strong>${DEST_EMAIL}</strong>. Entraremos em contato em breve para liberar seu acesso. Fique de olho no seu e-mail (e na caixa de spam).</span><br><a href="${waLink}" target="_blank" rel="noopener" style="display:inline-flex;margin-top:12px;background:#25D366;color:white;padding:11px 18px;border-radius:999px;text-decoration:none;font-weight:800;align-items:center;gap:8px">💬 Acelerar pelo WhatsApp (91) 98227-67763 →</a><br><a href="https://fvclares.github.io/cardapioonline/index.html?store=napolle" target="_blank" rel="noopener" style="color:#ff4722;text-decoration:underline;display:inline-block;margin-top:10px">→ Enquanto isso, testar cardápio Napollê ao vivo</a><div style="margin-top:8px;font-size:11px;opacity:0.6;font-weight:400">Se não receber em 5 min, chame no WhatsApp acima — é o canal mais rápido.</div>`;
+  }else{
+    ok.innerHTML=`✓ Recebemos, ${nome}! (<strong>${email}</strong>)<br><span style="font-weight:400;opacity:0.8">Tivemos uma instabilidade no envio automático por e-mail. <strong>Clique abaixo para confirmar seu teste de 7 dias direto no WhatsApp</strong> — é o canal garantido:</span><br><a href="${waLink}" target="_blank" rel="noopener" style="display:inline-flex;margin-top:12px;background:#25D366;color:white;padding:11px 18px;border-radius:999px;text-decoration:none;font-weight:800;align-items:center;gap:8px">💬 Confirmar no WhatsApp (91) 98227-67763 →</a><br><a href="mailto:${DEST_EMAIL}?subject=${encodeURIComponent('ZapMenu - Teste 7 dias: '+nome+' <'+email+'>')}&body=${encodeURIComponent('Nome: '+nome+'\nEmail: '+email+'\nData: '+new Date().toLocaleString('pt-BR')+'\nOrigem: '+location.href+'\n\nQuero testar o ZapMenu por 7 dias gratis.')}" style="color:#111;text-decoration:underline;display:inline-block;margin-top:10px;font-weight:700">ou enviar por e-mail manualmente para ${DEST_EMAIL}</a><br><a href="https://fvclares.github.io/cardapioonline/index.html?store=napolle" target="_blank" rel="noopener" style="color:#ff4722;text-decoration:underline;display:inline-block;margin-top:8px">→ Testar cardápio Napollê ao vivo</a>`;
+  }
+  // restaura botão caso usuário volte via back
+  if(btn){ btn.textContent=origBtnText; btn.disabled=false; btn.style.opacity=''; btn.style.cursor=''; }
 });
 // focus visible
 document.addEventListener('keydown',e=>{ if(e.key==='Tab') document.body.classList.add('kb'); });
